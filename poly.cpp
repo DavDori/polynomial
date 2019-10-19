@@ -3,10 +3,9 @@ using namespace std;
 
 #include "polynomial.h"
 #include <iostream>
+typedef vector<float> poly;
 
 poly sum(poly a, poly b);
-poly pickLarger(poly a, poly b);
-poly pickSmaller(poly a, poly b);
 poly sumLargerWithSmaller(poly larger,poly smaller);
 poly mult(poly a, poly b);
 poly multByConst(poly a, float c);
@@ -21,8 +20,7 @@ int main()
   Polynomial new_b(b);
   new_a.print();
   new_b.print();
-  Polynomial s = sum(new_a,new_b);
-  s.print();
+
   return 0;
 }
 
@@ -38,19 +36,9 @@ Polynomial sum(Polynomial a, Polynomial b)
   return result;
 }
 
-Polynomial pickLarger(Polynomial a, Polynomial b)
-{
-  Polynomial result;
-  a.getOrder() >= b.getOrder() ? result = a : result = b;
-  return result;
-}
 
-Polynomial pickSmaller(Polynomial a, Polynomial b)
-{
-  Polynomial result;
-  a.getOrder() <= b.getOrder() ? result = a : result = b;
-  return result;
-}
+
+
 
 Polynomial sumLargerWithSmaller(Polynomial larger, Polynomial smaller)
 {
@@ -63,7 +51,7 @@ Polynomial sumLargerWithSmaller(Polynomial larger, Polynomial smaller)
 }
 
 //-------------------------------------------------
-/*
+
 poly mult(poly a, poly b)
 {
   poly a_ = correctSize(a);
@@ -84,7 +72,7 @@ poly mult(poly a, poly b)
 /*
 sums every poly of the dynamic array
 */
-/*
+
 poly sumGroup(poly* p, int n)
 {
   poly result;
@@ -109,4 +97,3 @@ void print(poly a)
   }
   cout << endl;
 }
-*/

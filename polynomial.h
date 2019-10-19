@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
-typedef vector<float> poly;
+
 
 
 class Polynomial {
   public:
-    poly polynomial;
-    Polynomial(poly p){ polynomial = p; order = p.size();}
+    vector<float> polyCoefficients;
+    Polynomial(vector<float> coefficients){ polyCoefficients = coefficients; order = p.size();}
 
     Polynomial operator=(const Polynomial&);
     Polynomial operator+(const Polynomial&, const Polynomial&);
@@ -21,4 +21,6 @@ class Polynomial {
   private:
     int order;
     void printFirstAndSecond();
+    Polynomial pickLarger(const Polynomial&, const Polynomial&);
+    Polynomial pickSmaller(const Polynomial&, const Polynomial&);
 };
