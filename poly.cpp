@@ -4,7 +4,6 @@ using namespace std;
 #include <iostream>
 #include "polynomial.h"
 
-typedef vector<float> poly;
 /*
 poly mult(poly a, poly b);
 poly multByConst(poly a, float c);
@@ -12,18 +11,20 @@ poly sumGroup(poly* p, int n);
 */
 int main()
 {
-  poly a = {1,1,1,1,0};
-  poly b = {1,2,1};
-  Polynomial new_a(a);
-  Polynomial new_b(b);
-  new_a.correctSize();
-  new_b.correctSize();
+  vector<float> a = {1,1,1,1,0};
+  vector<float> b = {1,2,1};
+  Polynomial poly_a(a);
+  Polynomial poly_b(b);
 
-  Polynomial new_c = new_a + new_b;
+  Polynomial poly_c = poly_a + poly_b;
 
-  new_a.print();
-  new_b.print();
-  new_c.print();
+  Polynomial poly_d = poly_a - poly_b;
+
+
+  poly_a.print();
+  poly_b.print();
+  poly_c.print();
+  poly_d.print();
 
 
   return 0;
@@ -37,7 +38,7 @@ poly mult(poly a, poly b)
   poly b_ = correctSize(b);
   poly* polynomials;
   int polynomialsNumber = b.size();
-  polynomials = new poly[polynomialsNumber];
+  polynomials = poly poly[polynomialsNumber];
   for(int i = 0; i < polynomialsNumber; i++)
   {
     polynomials[i] = shift(a, i);

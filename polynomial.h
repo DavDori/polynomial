@@ -11,12 +11,14 @@ class Polynomial {
   friend Polynomial pickSmaller(const Polynomial&, const Polynomial&);
   friend Polynomial sumLargerWithSmaller(const Polynomial&, const Polynomial&);
 
+  friend Polynomial operator* (const Polynomial&, const Polynomial&);
+  friend Polynomial sumGroup();
+  
   public:
     vector<float> polyCoefficients;
     int order;
 
     Polynomial(vector<float> coefficients);
-    Polynomial();
 
     Polynomial& operator= (const Polynomial& r);
 

@@ -5,7 +5,10 @@ Polynomial::Polynomial(vector<float> coefficients)
 {
   polyCoefficients = coefficients;
   order = coefficients.size();
+  this->correctSize();
 }
+
+//MATH_OPERATIONS/////////////////////////////////////////
 
 /*
 OVERLOADING OPERATORS
@@ -33,6 +36,7 @@ Polynomial operator+ (const Polynomial& a, const Polynomial& b)
   Polynomial larger = pickLarger(tmp_a, tmp_b);
   Polynomial smaller = pickSmaller(tmp_a, tmp_b);
   Polynomial result = sumLargerWithSmaller(larger, smaller);
+  result.correctSize();
   return result;
 }
 
@@ -69,18 +73,20 @@ Polynomial sumLargerWithSmaller(const Polynomial& larger, const Polynomial& smal
   return result;
 }
 
+/*
+Difference operation: sums the first polinomial with the second
+inverted of sign; size correction is not needed since it's already
+provided by the sum operator
+*/
+
 Polynomial operator-(const Polynomial& a, const Polynomial& b)
 {
+  Polynomial inverted_b = b;
+  inverted_b.multipyByConstant(-1);
+  return (a + inverted_b);
 
 }
 
-void Polynomial::shift(int times)
-{
-  for(int i = 0; i < times; i++)
-  {
-    polyCoefficients.insert(polyCoefficients.begin(), 0);
-  }
-}
 
 void Polynomial::multipyByConstant(float value)
 {
@@ -90,7 +96,19 @@ void Polynomial::multipyByConstant(float value)
   }
 }
 
-//PRINT//////////////////////////////////////////////////
+/*
+Multiplication:
+*/
+
+void Polynomial::shift(int times)
+{
+  for(int i = 0; i < times; i++)
+  {
+    polyCoefficients.insert(polyCoefficients.begin(), 0);
+  }
+}
+
+//RAPPRESENTATION///////////////////////////////////////////
 
 void Polynomial::print()
 {
