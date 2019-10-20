@@ -1,32 +1,75 @@
-#include "polyCoefficients.h"
+#include "polynomial.h"
+#include <iostream>
 
-Polynomial::Polynomial(poly coefficients)
+Polynomial::Polynomial(vector<float> coefficients)
 {
   polyCoefficients = coefficients;
-  order = p.size();
+  order = coefficients.size();
 }
 
 /*
 OVERLOADING OPERATORS
 */
 
-Polynomial::operator=(const Polynomial& r)
+Polynomial& Polynomial::operator= (const Polynomial& r)
 {
-  polyCoefficients =  r.polyCoefficients;
+  polyCoefficients = r.polyCoefficients;
   order = r.order;
+  return *this;
 }
 
-Polynomial::operator+(const Polynomial& a, const Polynomial& b)
+/*
+sum operation: in order to sum two polinomials, it's necessary
+to iter the coefficients sum over the larger vector
+*/
+
+Polynomial operator+ (const Polynomial& a, const Polynomial& b)
 {
-  a.correctSize();
-  b.correctSize();
-  Polynomial larger = pickLarger(a,b);
-  Polynomial smaller = pickSmaller(a,b);
+  Polynomial tmp_a = a;
+  Polynomial tmp_b = b;
+  tmp_a.correctSize();
+  tmp_b.correctSize();
+
+  Polynomial larger = pickLarger(tmp_a, tmp_b);
+  Polynomial smaller = pickSmaller(tmp_a, tmp_b);
   Polynomial result = sumLargerWithSmaller(larger, smaller);
   return result;
 }
 
-Polynomial::operator-(const Polynomial& a, const Polynomial& b)
+void Polynomial::correctSize()
+{
+  while(polyCoefficients[order-1] == 0)
+  {
+      polyCoefficients.pop_back();
+      order--;
+  }
+}
+
+Polynomial pickLarger(const Polynomial& a, const Polynomial& b)
+{
+  Polynomial result({0});
+  a.order >= b.order ? result = a : result = b;
+  return result;
+}
+
+Polynomial pickSmaller(const Polynomial& a, const Polynomial& b)
+{
+  Polynomial result({0});
+  a.order <= b.order ? result = a : result = b;
+  return result;
+}
+
+Polynomial sumLargerWithSmaller(const Polynomial& larger, const Polynomial& smaller)
+{
+  Polynomial result = larger;
+  for(int i = 0; i < smaller.order; i++)
+  {
+    result.polyCoefficients[i] += smaller.polyCoefficients[i];
+  }
+  return result;
+}
+
+Polynomial operator-(const Polynomial& a, const Polynomial& b)
 {
 
 }
@@ -47,14 +90,7 @@ void Polynomial::multipyByConstant(float value)
   }
 }
 
-void Polynomial::correctSize()
-{
-  while(polyCoefficients[order-1] == 0)
-  {
-      polyCoefficients.pop_back();
-      order--;
-  }
-}
+//PRINT//////////////////////////////////////////////////
 
 void Polynomial::print()
 {
@@ -74,21 +110,4 @@ void Polynomial::printFirstAndSecond()
     cout << " + " << polyCoefficients[1] << 'x';
 }
 
-int Polynomial::getOrder()
-{
-  return order;
-}
-
-Polynomial Polynomial::pickLarger(Polynomial a, Polynomial b)
-{
-  Polynomial result;
-  a.getOrder() >= b.getOrder() ? result = a : result = b;
-  return result;
-}
-
-Polynomial Polynomial::pickSmaller(Polynomial a, Polynomial b)
-{
-  Polynomial result;
-  a.getOrder() <= b.getOrder() ? result = a : result = b;
-  return result;
-}
+///////////////////////////////////////////////////////////
