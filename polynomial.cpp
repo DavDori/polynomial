@@ -22,19 +22,14 @@ Polynomial& Polynomial::operator= (const Polynomial& r)
 }
 
 /*
-sum operation: in order to sum two polinomials, it's necessary
-to iter the coefficients sum over the larger vector
+sum operation:
 */
 
 Polynomial operator+ (const Polynomial& a, const Polynomial& b)
 {
-  Polynomial tmp_a = a;
-  Polynomial tmp_b = b;
-  tmp_a.correctSize();
-  tmp_b.correctSize();
+  Polynomial larger = pickLarger(a,b);
+  Polynomial smaller = pickSmaller(a,b);
 
-  Polynomial larger = pickLarger(tmp_a, tmp_b);
-  Polynomial smaller = pickSmaller(tmp_a, tmp_b);
   Polynomial result = sumLargerWithSmaller(larger, smaller);
   result.correctSize();
   return result;
@@ -74,9 +69,9 @@ Polynomial sumLargerWithSmaller(const Polynomial& larger, const Polynomial& smal
 }
 
 /*
-Difference operation: sums the first polinomial with the second
-inverted of sign; size correction is not needed since it's already
-provided by the sum operator
+Difference operation: sums the first polinomial and second which
+sign has been inverted; size correction is not needed since it's
+already provided by the sum operatorn
 */
 
 Polynomial operator-(const Polynomial& a, const Polynomial& b)
@@ -97,8 +92,21 @@ void Polynomial::multipyByConstant(float value)
 }
 
 /*
-Multiplication:
+Multiplication between two polynomials:
 */
+
+Polynomial operator* (const Polynomial& a, const Polynomial& b)
+{
+  int numberOfPolynomialsToSum = b.order;
+  Polynomial sumOfPolinomialMultiplications[numberOfPolynomialsToSum];
+
+  for(int i = 0; i < numberOfPolynomialsToSum; i++)
+  {
+    sumOfPolinomialMultiplications[i] = a.shift(i);
+    sumOfPolinomialMultiplications[i] = sumOfPolinomialMultiplications[i].multByConst(b.polyCoefficients[i]);
+  }
+  return sumGroup(sumOfPolinomialMultiplications,numberOfPolynomialsToSum);
+}
 
 void Polynomial::shift(int times)
 {
@@ -106,6 +114,25 @@ void Polynomial::shift(int times)
   {
     polyCoefficients.insert(polyCoefficients.begin(), 0);
   }
+}
+
+Polynomial sumGroup(Polynomial groupToSum[], int sizeOfGroup)
+{
+  Polynomial result = groupToSum[0];
+  for(int i = 1; i < sizeOfGroup; i++)
+  {
+    result = result + groupToSum[i];
+  }
+  return result;
+}
+
+/*
+Multiplication of a polynomial by a constant:
+*/
+
+Polynomial operator* (const Polynomial& poly, float number)
+{
+  return poly.multByConst(number);
 }
 
 //RAPPRESENTATION///////////////////////////////////////////

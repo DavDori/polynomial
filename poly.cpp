@@ -6,7 +6,6 @@ using namespace std;
 
 /*
 poly mult(poly a, poly b);
-poly multByConst(poly a, float c);
 poly sumGroup(poly* p, int n);
 */
 int main()
@@ -16,16 +15,20 @@ int main()
   Polynomial poly_a(a);
   Polynomial poly_b(b);
 
-  Polynomial poly_c = poly_a + poly_b;
+  Polynomial poly_1 = poly_a + poly_b;
 
-  Polynomial poly_d = poly_a - poly_b;
+  Polynomial poly_2 = poly_a - poly_b;
 
+  Polynomial poly_3 = poly_a * 4;
+
+  Polynomial poly_4 = poly_a * poly_b;
 
   poly_a.print();
   poly_b.print();
-  poly_c.print();
-  poly_d.print();
-
+  poly_1.print();
+  poly_2.print();
+  poly_3.print();
+  poly_4.print();
 
   return 0;
 }
