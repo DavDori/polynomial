@@ -98,18 +98,18 @@ Multiplication between two polynomials:
 Polynomial operator* (const Polynomial& a, const Polynomial& b)
 {
   int numberOfPolynomialsToSum = b.order;
-  Polynomial* sumOfPolinomialMultiplications;
-  sumOfPolinomialMultiplications = new Polynomial[numberOfPolynomialsToSum];
+  Polynomial* sumOfPolynomialMultiplications;
+  sumOfPolynomialMultiplications = new Polynomial[numberOfPolynomialsToSum];
 
   for(int i = 0; i < numberOfPolynomialsToSum; i++)
   {
-    sumOfPolinomialMultiplications[i] = a;
-    sumOfPolinomialMultiplications[i].shift(i);
-    sumOfPolinomialMultiplications[i].multipyByConstant(b.polyCoefficients[i]);
+    sumOfPolynomialMultiplications[i] = a;
+    sumOfPolynomialMultiplications[i].shift(i);
+    sumOfPolynomialMultiplications[i].multipyByConstant(b.polyCoefficients[i]);
   }
-  Polynomial result = sumGroup(sumOfPolinomialMultiplications, numberOfPolynomialsToSum);
+  Polynomial result = sumGroup(sumOfPolynomialMultiplications, numberOfPolynomialsToSum);
 
-  delete [] sumOfPolinomialMultiplications;
+  delete [] sumOfPolynomialMultiplications;
   return result;
 }
 
