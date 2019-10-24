@@ -46,14 +46,14 @@ void Polynomial::correctSize()
 
 Polynomial pickLarger(const Polynomial& a, const Polynomial& b)
 {
-  Polynomial result({0});
-  a.order >= b.order ? result = a : result = b;
+  Polynomial result;
+  a.order > b.order ? result = a : result = b;
   return result;
 }
 
 Polynomial pickSmaller(const Polynomial& a, const Polynomial& b)
 {
-  Polynomial result({0});
+  Polynomial result;
   a.order <= b.order ? result = a : result = b;
   return result;
 }
@@ -108,6 +108,7 @@ Polynomial operator* (const Polynomial& a, const Polynomial& b)
     sumOfPolinomialMultiplications[i].multipyByConstant(b.polyCoefficients[i]);
   }
   Polynomial result = sumGroup(sumOfPolinomialMultiplications, numberOfPolynomialsToSum);
+
   delete [] sumOfPolinomialMultiplications;
   return result;
 }
@@ -117,6 +118,7 @@ void Polynomial::shift(int times)
   for(int i = 0; i < times; i++)
   {
     polyCoefficients.insert(polyCoefficients.begin(), 0);
+    order++;
   }
 }
 

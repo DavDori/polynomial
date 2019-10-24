@@ -10,8 +10,8 @@ poly sumGroup(poly* p, int n);
 */
 int main()
 {
-  vector<float> a = {1,1};
-  vector<float> b = {1,1};
+  vector<float> a = {1,2,1,2,1};
+  vector<float> b = {1,2,3};
   Polynomial poly_a(a);
   Polynomial poly_b(b);
 
@@ -22,9 +22,9 @@ int main()
   Polynomial poly_3 = poly_a * poly_b;
 
   poly_a.print();
+  cout << "*" << endl;
   poly_b.print();
-  poly_1.print();
-  poly_2.print();
+  cout << "=" << endl;
   poly_3.print();
 
   return 0;

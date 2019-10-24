@@ -18,7 +18,8 @@ class Polynomial {
     vector<float> polyCoefficients;
     int order;
 
-    Polynomial(vector<float> coefficients = {0});
+    Polynomial(vector<float> coefficients);
+    Polynomial(){};
     Polynomial& operator= (const Polynomial& r);
     void shift(int times);
     void print();
