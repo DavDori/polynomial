@@ -10,8 +10,8 @@ poly sumGroup(poly* p, int n);
 */
 int main()
 {
-  vector<float> a = {1,1,1,1,0};
-  vector<float> b = {1,2,1};
+  vector<float> a = {1,1};
+  vector<float> b = {1,1};
   Polynomial poly_a(a);
   Polynomial poly_b(b);
 
@@ -19,16 +19,13 @@ int main()
 
   Polynomial poly_2 = poly_a - poly_b;
 
-  Polynomial poly_3 = poly_a * 4;
-
-  Polynomial poly_4 = poly_a * poly_b;
+  Polynomial poly_3 = poly_a * poly_b;
 
   poly_a.print();
   poly_b.print();
   poly_1.print();
   poly_2.print();
   poly_3.print();
-  poly_4.print();
 
   return 0;
 }

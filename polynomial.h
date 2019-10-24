@@ -12,24 +12,21 @@ class Polynomial {
   friend Polynomial sumLargerWithSmaller(const Polynomial&, const Polynomial&);
 
   friend Polynomial operator* (const Polynomial&, const Polynomial&);
-  friend Polynomial operator* (const Polynomial&, float);
-  friend Polynomial sumGroup(const Polynomial [], int sizeOfGroup);
+  friend Polynomial sumGroup(const Polynomial*, int sizeOfGroup);
 
   public:
     vector<float> polyCoefficients;
     int order;
 
-    Polynomial(vector<float> coefficients);
-
+    Polynomial(vector<float> coefficients = {0});
     Polynomial& operator= (const Polynomial& r);
-
     void shift(int times);
-    void multipyByConstant(float value);
-    void correctSize();
     void print();
 
   private:
     void printFirstAndSecond();
+    void correctSize();
+    void multipyByConstant(float value);
 };
 
 #endif

@@ -98,14 +98,18 @@ Multiplication between two polynomials:
 Polynomial operator* (const Polynomial& a, const Polynomial& b)
 {
   int numberOfPolynomialsToSum = b.order;
-  Polynomial sumOfPolinomialMultiplications[numberOfPolynomialsToSum];
+  Polynomial* sumOfPolinomialMultiplications;
+  sumOfPolinomialMultiplications = new Polynomial[numberOfPolynomialsToSum];
 
   for(int i = 0; i < numberOfPolynomialsToSum; i++)
   {
-    sumOfPolinomialMultiplications[i] = a.shift(i);
-    sumOfPolinomialMultiplications[i] = sumOfPolinomialMultiplications[i].multByConst(b.polyCoefficients[i]);
+    sumOfPolinomialMultiplications[i] = a;
+    sumOfPolinomialMultiplications[i].shift(i);
+    sumOfPolinomialMultiplications[i].multipyByConstant(b.polyCoefficients[i]);
   }
-  return sumGroup(sumOfPolinomialMultiplications,numberOfPolynomialsToSum);
+  Polynomial result = sumGroup(sumOfPolinomialMultiplications, numberOfPolynomialsToSum);
+  delete [] sumOfPolinomialMultiplications;
+  return result;
 }
 
 void Polynomial::shift(int times)
@@ -116,7 +120,7 @@ void Polynomial::shift(int times)
   }
 }
 
-Polynomial sumGroup(Polynomial groupToSum[], int sizeOfGroup)
+Polynomial sumGroup(const Polynomial* groupToSum, int sizeOfGroup)
 {
   Polynomial result = groupToSum[0];
   for(int i = 1; i < sizeOfGroup; i++)
@@ -124,15 +128,6 @@ Polynomial sumGroup(Polynomial groupToSum[], int sizeOfGroup)
     result = result + groupToSum[i];
   }
   return result;
-}
-
-/*
-Multiplication of a polynomial by a constant:
-*/
-
-Polynomial operator* (const Polynomial& poly, float number)
-{
-  return poly.multByConst(number);
 }
 
 //RAPPRESENTATION///////////////////////////////////////////
