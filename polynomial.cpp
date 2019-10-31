@@ -1,10 +1,19 @@
 #include "polynomial.h"
 #include <iostream>
+#include <string>
 
 Polynomial::Polynomial(vector<float> coefficients)
 {
-  polyCoefficients = coefficients;
+  numeratorCoefficient = coefficients;
   order = coefficients.size();
+  this->correctSize();
+}
+
+Polynomial::Polynomial(vector<float> numCoefficients, vector<float> denomCoefficients)
+{
+  numeratorCoefficient = numCoefficients;
+  denominatorCoefficient = denomCoefficients;
+  order = numCoefficients.size() - denomCoefficients.size();
   this->correctSize();
 }
 
@@ -82,7 +91,6 @@ Polynomial operator-(const Polynomial& a, const Polynomial& b)
 
 }
 
-
 void Polynomial::multipyByConstant(float value)
 {
   for(int i = 0; i < order; i++)
@@ -134,22 +142,40 @@ Polynomial sumGroup(const Polynomial* groupToSum, int sizeOfGroup)
 
 //RAPPRESENTATION///////////////////////////////////////////
 
-void Polynomial::print()
+string Polynomial::print()
 {
-  printFirstAndSecond();
-  for(int i = 2; i < order; i++)
+  string result
+  if(!numeratorCoefficient.emplty())
   {
-    cout << " + " << polyCoefficients[i] << "x^" << i;
+    result = getStrVector(numeratorCoefficient);
+    result += " / ";
+    if(!denominatorCoefficient.emplty())
+    {
+      result += getStrVector(denominatorCoefficient);
+    }
   }
-  cout << endl;
+  else  result = "0";
+  return result;
 }
 
-void Polynomial::printFirstAndSecond()
+string Polynomial::getStrVector(vector<float> coefficient)
 {
-  if(order >= 1)
-    cout << polyCoefficients[0];
-  if(order >= 2)
-    cout << " + " << polyCoefficients[1] << 'x';
+  string result = printFirstAndSecond(coefficient);
+  for(int i = 2; i < coefficient.size(); i++)
+  {
+    result += " + " + coefficient[i] + "x^" + i;
+  }
+  return result;
+}
+
+void Polynomial::printFirstAndSecond(vector<float> coefficient)
+{
+  string result;
+  if(coefficient.size() >= 1)
+    result += coefficient[0];
+  if(coefficient.size() >= 2)
+    result += " + " += coefficient[1] += 'x';
+  return result
 }
 
 ///////////////////////////////////////////////////////////

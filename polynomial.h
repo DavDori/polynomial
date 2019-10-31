@@ -1,4 +1,6 @@
 #include <vector>
+#include <string>
+
 using namespace std;
 
 #ifndef POLYNOMIAL_H
@@ -15,17 +17,22 @@ class Polynomial {
   friend Polynomial sumGroup(const Polynomial*, int sizeOfGroup);
 
   public:
-    vector<float> polyCoefficients;
+    vector<float> numeratorCoefficient;
+    vector<float> denominatorCoefficient;
+
     int order;
 
-    Polynomial(vector<float> coefficients);
+    Polynomial(vector<float>);
+    Polynomial(vector<float>, vector<float>);
+
     Polynomial(){};
     Polynomial& operator= (const Polynomial& r);
     void shift(int times);
-    void print();
+    string print();
 
   private:
-    void printFirstAndSecond();
+    string getStrVector(vector<float>);
+    string getStrFirstAndSecond(vector<float>);
     void correctSize();
     void multipyByConstant(float value);
 };
