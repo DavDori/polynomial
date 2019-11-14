@@ -1,20 +1,19 @@
 #include "polynomial.h"
 #include <iostream>
-#include <string>
 
 Polynomial::Polynomial(vector<float> coefficients)
 {
   numeratorCoefficient = coefficients;
-  order = coefficients.size();
   this->correctSize();
+  order = coefficients.size();
 }
 
 Polynomial::Polynomial(vector<float> numCoefficients, vector<float> denomCoefficients)
 {
   numeratorCoefficient = numCoefficients;
   denominatorCoefficient = denomCoefficients;
-  order = numCoefficients.size() - denomCoefficients.size();
   this->correctSize();
+  order = numCoefficients.size() - denomCoefficients.size();
 }
 
 //MATH_OPERATIONS/////////////////////////////////////////
@@ -25,7 +24,8 @@ OVERLOADING OPERATORS
 
 Polynomial& Polynomial::operator= (const Polynomial& r)
 {
-  polyCoefficients = r.polyCoefficients;
+  numeratorCoefficient = r.numeratorCoefficient;
+  denominatorCoefficient = r.denominatorCoefficient;
   order = r.order;
   return *this;
 }
@@ -36,20 +36,55 @@ sum operation:
 
 Polynomial operator+ (const Polynomial& a, const Polynomial& b)
 {
-  Polynomial larger = pickLarger(a,b);
-  Polynomial smaller = pickSmaller(a,b);
+  Polynomial result;
+  if(!a.denominatorCoefficient.empty() && !b.denominatorCoefficient.empty())
+  {
+    Polynomial b_denom(b.denominatorCoefficient);
+    Polynomial a_denom(a.denominatorCoefficient);
 
-  Polynomial result = sumLargerWithSmaller(larger, smaller);
+    Polynomial a_b_denom =
+  }
+  else if(!a.denominatorCoefficient.empty() && b.denominatorCoefficient.empty())
+  {
+    Polynomial a_denom(a.denominatorCoefficient);
+
+  }
+  else if(a.denominatorCoefficient.empty() && !b.denominatorCoefficient.empty())
+  {
+    Polynomial b_denom(b.denominatorCoefficient);
+
+  }
+  else
+  {
+    result = sumNoDenominator(a,b);
+  }
   result.correctSize();
   return result;
 }
 
-void Polynomial::correctSize()
+Polynomial sumNoDenominator(const Polynomial& a, const Polynomial& b)
 {
-  while(polyCoefficients[order-1] == 0)
+  Polynomial larger = pickLarger(a,b);
+  Polynomial smaller = pickSmaller(a,b);
+  Polynomial result = sumLargerWithSmaller(larger, smaller);
+  return result;
+}
+
+void Polynomial::correctSize()//return a segmentatio fault
+{
+  if(numeratorCoefficient.empty() == false)
+    correctCoefficientSize(numeratorCoefficient);
+  if(denominatorCoefficient.empty() == false)
+    correctCoefficientSize(denominatorCoefficient);
+}
+
+void Polynomial::correctCoefficientSize(vector<float> coefficients)
+{
+  int index = coefficients.size()-1;
+  while(coefficients[index] == 0)
   {
-      polyCoefficients.pop_back();
-      order--;
+      coefficients.pop_back();
+      index--;
   }
 }
 
@@ -72,7 +107,7 @@ Polynomial sumLargerWithSmaller(const Polynomial& larger, const Polynomial& smal
   Polynomial result = larger;
   for(int i = 0; i < smaller.order; i++)
   {
-    result.polyCoefficients[i] += smaller.polyCoefficients[i];
+    result.numeratorCoefficient[i] += smaller.numeratorCoefficient[i];
   }
   return result;
 }
@@ -95,7 +130,7 @@ void Polynomial::multipyByConstant(float value)
 {
   for(int i = 0; i < order; i++)
   {
-    polyCoefficients[i] = polyCoefficients[i] * value;
+    numeratorCoefficient[i] = numeratorCoefficient[i] * value;
   }
 }
 
@@ -113,7 +148,7 @@ Polynomial operator* (const Polynomial& a, const Polynomial& b)
   {
     sumOfPolynomialMultiplications[i] = a;
     sumOfPolynomialMultiplications[i].shift(i);
-    sumOfPolynomialMultiplications[i].multipyByConstant(b.polyCoefficients[i]);
+    sumOfPolynomialMultiplications[i].multipyByConstant(b.numeratorCoefficient[i]);
   }
   Polynomial result = sumGroup(sumOfPolynomialMultiplications, numberOfPolynomialsToSum);
 
@@ -125,7 +160,7 @@ void Polynomial::shift(int times)
 {
   for(int i = 0; i < times; i++)
   {
-    polyCoefficients.insert(polyCoefficients.begin(), 0);
+    numeratorCoefficient.insert(numeratorCoefficient.begin(), 0);
     order++;
   }
 }
@@ -144,13 +179,13 @@ Polynomial sumGroup(const Polynomial* groupToSum, int sizeOfGroup)
 
 string Polynomial::print()
 {
-  string result
-  if(!numeratorCoefficient.emplty())
+  string result;
+  if(!numeratorCoefficient.empty())
   {
     result = getStrVector(numeratorCoefficient);
-    result += " / ";
-    if(!denominatorCoefficient.emplty())
+    if(!denominatorCoefficient.empty())
     {
+      result += " / ";
       result += getStrVector(denominatorCoefficient);
     }
   }
@@ -160,22 +195,22 @@ string Polynomial::print()
 
 string Polynomial::getStrVector(vector<float> coefficient)
 {
-  string result = printFirstAndSecond(coefficient);
+  string result = getStrFirstAndSecond(coefficient);
   for(int i = 2; i < coefficient.size(); i++)
   {
-    result += " + " + coefficient[i] + "x^" + i;
+    result += " + "+std::to_string(int(coefficient[i]))+"x^"+std::to_string(i);
   }
   return result;
 }
 
-void Polynomial::printFirstAndSecond(vector<float> coefficient)
+string Polynomial::getStrFirstAndSecond(vector<float> coefficient)
 {
   string result;
   if(coefficient.size() >= 1)
-    result += coefficient[0];
+    result += std::to_string(int(coefficient[0]));
   if(coefficient.size() >= 2)
-    result += " + " += coefficient[1] += 'x';
-  return result
+    result += " + " + std::to_string(int(coefficient[1])) + 'x';
+  return result;
 }
 
 ///////////////////////////////////////////////////////////

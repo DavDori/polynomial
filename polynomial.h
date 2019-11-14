@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstdio>
 #include <string>
 
 using namespace std;
@@ -24,8 +25,8 @@ class Polynomial {
 
     Polynomial(vector<float>);
     Polynomial(vector<float>, vector<float>);
-
     Polynomial(){};
+
     Polynomial& operator= (const Polynomial& r);
     void shift(int times);
     string print();
@@ -34,6 +35,7 @@ class Polynomial {
     string getStrVector(vector<float>);
     string getStrFirstAndSecond(vector<float>);
     void correctSize();
+    void correctCoefficientSize(vector<float>);
     void multipyByConstant(float value);
 };
 
