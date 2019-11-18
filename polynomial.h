@@ -10,6 +10,7 @@ using namespace std;
 class Polynomial {
   friend Polynomial operator+ (const Polynomial&, const Polynomial&);
   friend Polynomial operator- (const Polynomial&, const Polynomial&);
+  friend Polynomial sumNoDenominator(const Polynomial&, const Polynomial&);
   friend Polynomial pickLarger(const Polynomial&, const Polynomial&);
   friend Polynomial pickSmaller(const Polynomial&, const Polynomial&);
   friend Polynomial sumLargerWithSmaller(const Polynomial&, const Polynomial&);
@@ -21,7 +22,8 @@ class Polynomial {
     vector<float> numeratorCoefficient;
     vector<float> denominatorCoefficient;
 
-    int order;
+    int numeratorOrder;
+    int denominatorOrder;
 
     Polynomial(vector<float>);
     Polynomial(vector<float>, vector<float>);
@@ -35,7 +37,7 @@ class Polynomial {
     string getStrVector(vector<float>);
     string getStrFirstAndSecond(vector<float>);
     void correctSize();
-    void correctCoefficientSize(vector<float>);
+    vector<float> correctCoefficientSize(const vector<float>&);
     void multipyByConstant(float value);
 };
 
