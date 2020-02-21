@@ -25,8 +25,9 @@ class Polynomial {
     int numeratorOrder;
     int denominatorOrder;
 
-    Polynomial(vector<float>);
-    Polynomial(vector<float>, vector<float>);
+    Polynomial(vector<float>);  //num only
+    Polynomial(vector<float>, vector<float>); //num,denum
+    Polynomial(int, float); //size,value
     Polynomial(){};
 
     Polynomial& operator= (const Polynomial& r);
@@ -38,7 +39,7 @@ class Polynomial {
     string getStrFirstAndSecond(vector<float>);
     void correctSize();
     vector<float> correctCoefficientSize(const vector<float>&);
-    void multipyByConstant(float value);
+    void multipyByConstant(float);
 };
 
 #endif

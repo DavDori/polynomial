@@ -18,6 +18,14 @@ Polynomial::Polynomial(vector<float> numCoefficients, vector<float> denomCoeffic
   this->correctSize();
 }
 
+Polynomial::Polynomial(int size, float value)
+{
+  numeratorCoefficient = vector<float>(size,value);
+
+  numeratorOrder = size;
+  denominatorOrder = 0;
+}
+
 //MATH_OPERATIONS/////////////////////////////////////////
 
 /*
@@ -60,7 +68,6 @@ Polynomial operator+ (const Polynomial& a, const Polynomial& b)
   {
     result = sumNoDenominator(a,b);
   }
-  result.correctSize();
   return result;
 }
 
@@ -131,16 +138,16 @@ already provided by the sum operatorn
 Polynomial operator-(const Polynomial& a, const Polynomial& b)
 {
   Polynomial inverted_b = b;
-  inverted_b.multipyByConstant(-1);
+  inverted_b.multipyByConstant(-1.0);
   return (a + inverted_b);
 
 }
 
 void Polynomial::multipyByConstant(float value)
 {
-  for(int i = 0; i < numeratorOrder; i++)
+  for(int i = 0; i < numeratorCoefficient.size(); i++)
   {
-    numeratorCoefficient[i] = numeratorCoefficient[i] * value;
+    numeratorCoefficient[i] *= value;
   }
 }
 
@@ -151,18 +158,18 @@ Multiplication between two polynomials:
 Polynomial operator* (const Polynomial& a, const Polynomial& b)
 {
   int numberOfPolynomialsToSum = b.numeratorOrder;
-  Polynomial* sumOfPolynomialMultiplications;
-  sumOfPolynomialMultiplications = new Polynomial[numberOfPolynomialsToSum];
+  Polynomial* polynomialToSum;
+  polynomialToSum = new Polynomial[numberOfPolynomialsToSum];
 
   for(int i = 0; i < numberOfPolynomialsToSum; i++)
   {
-    sumOfPolynomialMultiplications[i] = a;
-    sumOfPolynomialMultiplications[i].shift(i);
-    sumOfPolynomialMultiplications[i].multipyByConstant(b.numeratorCoefficient[i]);
+    polynomialToSum[i] = a;
+    polynomialToSum[i].shift(i);
+    polynomialToSum[i].multipyByConstant(b.numeratorCoefficient[i]);
   }
-  Polynomial result = sumGroup(sumOfPolynomialMultiplications, numberOfPolynomialsToSum);
 
-  delete [] sumOfPolynomialMultiplications;
+  Polynomial result = sumGroup(polynomialToSum, numberOfPolynomialsToSum);
+  delete [] polynomialToSum;
   return result;
 }
 
@@ -175,10 +182,11 @@ void Polynomial::shift(int times)
   }
 }
 
-Polynomial sumGroup(const Polynomial* groupToSum, int sizeOfGroup)
+Polynomial sumGroup(const Polynomial* groupToSum, int groupSize)
 {
-  Polynomial result = groupToSum[0];
-  for(int i = 1; i < sizeOfGroup; i++)
+  Polynomial result(groupSize,0);  //allocato alla dim massima
+
+  for(int i = 0; i < groupSize; i++)
   {
     result = result + groupToSum[i];
   }
@@ -206,9 +214,12 @@ string Polynomial::print()
 string Polynomial::getStrVector(vector<float> coefficient)
 {
   string result = getStrFirstAndSecond(coefficient);
-  for(int i = 2; i < coefficient.size(); i++)
+  if(coefficient.size() > 2)
   {
-    result += " + "+std::to_string(int(coefficient[i]))+"x^"+std::to_string(i);
+    for(int i = 2; i < coefficient.size(); i++)
+    {
+      result += " + "+std::to_string(int(coefficient[i]))+"x^"+std::to_string(i);
+    }
   }
   return result;
 }
@@ -219,7 +230,7 @@ string Polynomial::getStrFirstAndSecond(vector<float> coefficient)
   if(coefficient.size() >= 1)
     result += std::to_string(int(coefficient[0]));
   if(coefficient.size() >= 2)
-    result += " + " + std::to_string(int(coefficient[1])) + 'x';
+    result += " + " + std::to_string(int(coefficient[1])) + "x";
   return result;
 }
 
