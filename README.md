@@ -1,9 +1,9 @@
 # polynomial library [C++]
 The library allows basic polynomial operations, such as:
-- sum (+)
-- difference (-)
+- sum between polynomials (+)
+- difference between polynomials (-)
 - assignment (=)
-- multiplication (*)
-- polynomial rappresentation (example: 1+2x^2)
+- multiplication between polynomials (*)
+- polynomial rappresentation (example: 1+0x+2x^2/1+1x)
 - multiplication by constant values
 
