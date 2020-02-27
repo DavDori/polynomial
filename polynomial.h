@@ -10,13 +10,13 @@ using namespace std;
 class Polynomial {
   friend Polynomial operator+ (const Polynomial&, const Polynomial&);
   friend Polynomial operator- (const Polynomial&, const Polynomial&);
-  friend Polynomial sumNoDenominator(const Polynomial&, const Polynomial&);
-  friend Polynomial pickLarger(const Polynomial&, const Polynomial&);
-  friend Polynomial pickSmaller(const Polynomial&, const Polynomial&);
-  friend Polynomial sumLargerWithSmaller(const Polynomial&, const Polynomial&);
+  //friend Polynomial sumNoDenominator(const Polynomial&, const Polynomial&);
+  //friend Polynomial pickLarger(const Polynomial&, const Polynomial&);
+  //friend Polynomial pickSmaller(const Polynomial&, const Polynomial&);
+  //friend Polynomial sumLargerWithSmaller(const Polynomial&, const Polynomial&);
 
   friend Polynomial operator* (const Polynomial&, const Polynomial&);
-  friend Polynomial sumGroup(const Polynomial*, int sizeOfGroup);
+  //friend Polynomial sumGroup(const Polynomial*, int sizeOfGroup);
 
   public:
     vector<float> numeratorCoefficient;

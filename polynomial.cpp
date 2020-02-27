@@ -1,9 +1,18 @@
 #include "polynomial.h"
 #include <iostream>
 
+vector<float> multiplyVectors(const vector<float>&, const vector<float>&);
+vector<float> multiplyVectorConstant(const vector<float>&, int);
+vector<float> sumElements(const vector<float>* vectorsToSum, int n);
+vector<float> sumVectors(const vector<float>&, const vector<float>&);
+vector<float> sumVectorLargerSmaller(const vector<float>&, const vector<float>&);
+
+//CONSTRUCTORS///////////////////////////////////////////
+
 Polynomial::Polynomial(vector<float> coefficients)
 {
   numeratorCoefficient = coefficients;
+  denominatorCoefficient = {1};
   numeratorOrder = coefficients.size();
   denominatorOrder = 0;
   this->correctSize();
@@ -21,62 +30,9 @@ Polynomial::Polynomial(vector<float> numCoefficients, vector<float> denomCoeffic
 Polynomial::Polynomial(int size, float value)
 {
   numeratorCoefficient = vector<float>(size,value);
-
+  denominatorCoefficient = {1};
   numeratorOrder = size;
   denominatorOrder = 0;
-}
-
-//MATH_OPERATIONS/////////////////////////////////////////
-
-/*
-OVERLOADING OPERATORS
-*/
-
-Polynomial& Polynomial::operator= (const Polynomial& r)
-{
-  numeratorCoefficient = r.numeratorCoefficient;
-  denominatorCoefficient = r.denominatorCoefficient;
-  numeratorOrder = r.numeratorOrder;
-  denominatorOrder = r.denominatorOrder;
-  return *this;
-}
-
-/*
-sum operation:
-*/
-
-Polynomial operator+ (const Polynomial& a, const Polynomial& b)
-{
-  Polynomial result;
-  if(a.denominatorOrder != 0 && b.denominatorOrder != 0)
-  {
-    Polynomial b_denominator(b.denominatorCoefficient);
-    Polynomial a_denominator(a.denominatorCoefficient);
-    result = sumNoDenominator(a * b_denominator, b * a_denominator);
-  }
-  else if(a.denominatorOrder != 0)
-  {
-    Polynomial a_denominator(a.denominatorCoefficient);
-    result = sumNoDenominator(a, b * a_denominator);
-  }
-  else if(b.denominatorOrder != 0)
-  {
-    Polynomial b_denominator(b.denominatorCoefficient);
-    result = sumNoDenominator(a * b_denominator, b);
-  }
-  else
-  {
-    result = sumNoDenominator(a,b);
-  }
-  return result;
-}
-
-Polynomial sumNoDenominator(const Polynomial& a, const Polynomial& b)
-{
-  Polynomial larger = pickLarger(a,b);
-  Polynomial smaller = pickSmaller(a,b);
-  Polynomial result = sumLargerWithSmaller(larger, smaller);
-  return result;
 }
 
 void Polynomial::correctSize()
@@ -105,28 +61,93 @@ vector<float> Polynomial::correctCoefficientSize(const vector<float>& coefficien
   return newCoefficients;
 }
 
-Polynomial pickLarger(const Polynomial& a, const Polynomial& b)
+//MATH_OPERATIONS/////////////////////////////////////////
+
+/*
+OVERLOADING OPERATORS
+*/
+
+Polynomial& Polynomial::operator= (const Polynomial& r)
 {
-  Polynomial result;
-  a.numeratorOrder > b.numeratorOrder ? result = a : result = b;
+  numeratorCoefficient = r.numeratorCoefficient;
+  denominatorCoefficient = r.denominatorCoefficient;
+  numeratorOrder = r.numeratorOrder;
+  denominatorOrder = r.denominatorOrder;
+  return *this;
+}
+
+/*
+sum operation:
+*/
+
+Polynomial operator+ (const Polynomial& a, const Polynomial& b)
+{
+  vector<float> denominator = multiplyVectors(a.denominatorCoefficient, b.denominatorCoefficient);
+  vector<float> numerator1 = multiplyVectors(a.numeratorCoefficient, b.denominatorCoefficient);
+  vector<float> numerator2 = multiplyVectors(b.numeratorCoefficient, a.denominatorCoefficient);
+  vector<float> numerator = sumVectors(numerator1, numerator2);
+  Polynomial result(numerator, denominator);
   return result;
 }
 
-Polynomial pickSmaller(const Polynomial& a, const Polynomial& b)
+vector<float> multiplyVectors(const vector<float>& a, const vector<float>& b)
 {
-  Polynomial result;
-  a.numeratorOrder <= b.numeratorOrder ? result = a : result = b;
-  return result;
-}
+  int numberOfPolynomialsToSum = b.size();
+  vector<float>* polynomialsToSum = new vector<float>[numberOfPolynomialsToSum];
 
-Polynomial sumLargerWithSmaller(const Polynomial& larger, const Polynomial& smaller)
-{
-  Polynomial result = larger;
-  for(int i = 0; i < smaller.numeratorOrder; i++)
+  for(int i = 0; i < numberOfPolynomialsToSum; i++) //fill array
   {
-    result.numeratorCoefficient[i] += smaller.numeratorCoefficient[i];
+    polynomialsToSum[i] = multiplyVectorConstant(a, b[i]);
+    polynomialsToSum[i].insert(polynomialsToSum[i].begin(),i,0.0);
+  }
+  vector<float> result = sumElements(polynomialsToSum, numberOfPolynomialsToSum);
+
+  delete[] polynomialsToSum;
+  return result;
+}
+
+vector<float> multiplyVectorConstant(const vector<float>& v, int c)
+{
+  vector<float> result = v;
+  for(int i = 0; i < v.size(); i++)
+  {
+    result[i] *= c;
   }
   return result;
+}
+
+vector<float> sumElements(const vector<float>* vectorsToSum, int n)
+{
+  vector<float> sum = vectorsToSum[0];
+  for(int i = 1; i < n; i++)
+  {
+    sum = sumVectors(sum,vectorsToSum[i]);
+  }
+  return sum;
+}
+
+vector<float> sumVectors(const vector<float>& a, const vector<float>& b)
+{
+  vector<float> sum;
+  if(a.size() >= b.size())
+  {
+    sum = sumVectorLargerSmaller(a,b);
+  }
+  else
+  {
+    sum = sumVectorLargerSmaller(b,a);
+  }
+  return sum;
+}
+
+vector<float> sumVectorLargerSmaller(const vector<float>& larger, const vector<float>& smaller)
+{
+  vector<float> sum = larger;
+  for(int i = 0; i < smaller.size(); i++)
+  {
+    sum[i] = sum[i] + smaller[i];
+  }
+  return sum;
 }
 
 /*
@@ -157,19 +178,10 @@ Multiplication between two polynomials:
 
 Polynomial operator* (const Polynomial& a, const Polynomial& b)
 {
-  int numberOfPolynomialsToSum = b.numeratorOrder;
-  Polynomial* polynomialToSum;
-  polynomialToSum = new Polynomial[numberOfPolynomialsToSum];
+  vector<float> num = multiplyVectors(a.numeratorCoefficient, b.numeratorCoefficient);
+  vector<float> den = multiplyVectors(a.denominatorCoefficient, b.denominatorCoefficient);
 
-  for(int i = 0; i < numberOfPolynomialsToSum; i++)
-  {
-    polynomialToSum[i] = a;
-    polynomialToSum[i].shift(i);
-    polynomialToSum[i].multipyByConstant(b.numeratorCoefficient[i]);
-  }
-
-  Polynomial result = sumGroup(polynomialToSum, numberOfPolynomialsToSum);
-  delete [] polynomialToSum;
+  Polynomial result(num,den);
   return result;
 }
 
@@ -182,32 +194,17 @@ void Polynomial::shift(int times)
   }
 }
 
-Polynomial sumGroup(const Polynomial* groupToSum, int groupSize)
-{
-  Polynomial result(groupSize,0);  //allocato alla dim massima
-
-  for(int i = 0; i < groupSize; i++)
-  {
-    result = result + groupToSum[i];
-  }
-  return result;
-}
-
 //RAPPRESENTATION///////////////////////////////////////////
 
 string Polynomial::print()
 {
   string result;
-  if(numeratorOrder != 0)
+  result = getStrVector(numeratorCoefficient);
+  if(denominatorOrder != 0)
   {
-    result = getStrVector(numeratorCoefficient);
-    if(denominatorOrder != 0)
-    {
-      result += " / ";
-      result += getStrVector(denominatorCoefficient);
-    }
+    result += " / ";
+    result += getStrVector(denominatorCoefficient);
   }
-  else  result = "0";
   return result;
 }
 
