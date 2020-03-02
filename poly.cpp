@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
   vector<float> n1 = {1,1};
-  vector<float> d1 = {1,1};
+  vector<float> d1 = {1};
 
   vector<float> n2 = {1,1};
 

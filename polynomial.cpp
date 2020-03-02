@@ -37,12 +37,12 @@ void Polynomial::initPolynomial(vector<float> numCoefficients, vector<float> den
 
 void Polynomial::correctSize()
 {
-  if(numeratorOrder != 0)
+  if(numeratorOrder > 1)
   {
     numeratorCoefficient = correctCoefficientSize(numeratorCoefficient);
     numeratorOrder = numeratorCoefficient.size();
   }
-  if(denominatorOrder != 0)
+  if(denominatorOrder > 1)
   {
     denominatorCoefficient = correctCoefficientSize(denominatorCoefficient);
     denominatorOrder = denominatorCoefficient.size();
@@ -193,40 +193,57 @@ void Polynomial::shift(int times)
   }
 }
 
-//RAPPRESENTATION///////////////////////////////////////////
+//REPRESENTATION///////////////////////////////////////////
 
 string Polynomial::print()
 {
   string result;
-  result = getStrVector(numeratorCoefficient);
-  if(denominatorOrder != 0)
+  if(numeratorOrder > 0)
+    result = getStrVector(numeratorCoefficient);
+  else
+    result += "0";
+
+  if(denominatorOrder > 1)
   {
     result += " / ";
     result += getStrVector(denominatorCoefficient);
+  }
+  else if(denominatorOrder == 0)
+  {
+    result += " / ";
+    result += "0";
   }
   return result;
 }
 
 string Polynomial::getStrVector(vector<float> coefficient)
 {
-  string result = getStrFirstAndSecond(coefficient);
+  string result = getStrFirst(coefficient);
+  result += getStrSecond(coefficient);
   if(coefficient.size() > 2)
   {
     for(int i = 2; i < coefficient.size(); i++)
     {
-      result += " + "+std::to_string(int(coefficient[i]))+"x^"+std::to_string(i);
+      result += " + "+ std::to_string(int(coefficient[i]))+"x^"+std::to_string(i);
     }
   }
   return result;
 }
 
-string Polynomial::getStrFirstAndSecond(vector<float> coefficient)
+string Polynomial::getStrFirst(vector<float> coefficient)
 {
   string result;
-  if(coefficient.size() >= 1)
-    result += std::to_string(int(coefficient[0]));
+  result = std::to_string(int(coefficient[0]));
+  return result;
+}
+
+string Polynomial::getStrSecond(vector<float> coefficient)
+{
+  string result;
   if(coefficient.size() >= 2)
+  {
     result += " + " + std::to_string(int(coefficient[1])) + "x";
+  }
   return result;
 }
 

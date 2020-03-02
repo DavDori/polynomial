@@ -11,6 +11,7 @@ class Polynomial {
   friend Polynomial operator+ (const Polynomial&, const Polynomial&);
   friend Polynomial operator- (const Polynomial&, const Polynomial&);
   friend Polynomial operator* (const Polynomial&, const Polynomial&);
+
   public:
     vector<float> numeratorCoefficient;
     vector<float> denominatorCoefficient;
@@ -30,7 +31,8 @@ class Polynomial {
   private:
     void initPolynomial(vector<float>, vector<float>);
     string getStrVector(vector<float>);
-    string getStrFirstAndSecond(vector<float>);
+    string getStrFirst(vector<float>);
+    string getStrSecond(vector<float>);
     void correctSize();
     vector<float> correctCoefficientSize(const vector<float>&);
     void multipyByConstant(float);
