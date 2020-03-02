@@ -9,30 +9,30 @@ vector<float> sumVectorLargerSmaller(const vector<float>&, const vector<float>&)
 
 //CONSTRUCTORS///////////////////////////////////////////
 
-Polynomial::Polynomial(vector<float> coefficients)
+Polynomial::Polynomial(vector<float> numCoefficients, vector<float> denomCoefficients)
 {
-  numeratorCoefficient = coefficients;
-  denominatorCoefficient = {1};
-  numeratorOrder = coefficients.size();
-  denominatorOrder = 0;
+  initPolynomial(numCoefficients,denomCoefficients);
   this->correctSize();
 }
 
-Polynomial::Polynomial(vector<float> numCoefficients, vector<float> denomCoefficients)
+Polynomial::Polynomial(vector<float> coefficients)
 {
-  numeratorCoefficient = numCoefficients;
-  denominatorCoefficient = denomCoefficients;
-  numeratorOrder = numCoefficients.size();
-  denominatorOrder = denomCoefficients.size();
+  initPolynomial(coefficients,{1});
   this->correctSize();
 }
 
 Polynomial::Polynomial(int size, float value)
 {
-  numeratorCoefficient = vector<float>(size,value);
-  denominatorCoefficient = {1};
-  numeratorOrder = size;
-  denominatorOrder = 0;
+  vector<float> coefficients = vector<float>(size,value);
+  initPolynomial(coefficients,{1});
+}
+
+void Polynomial::initPolynomial(vector<float> numCoefficients, vector<float> denomCoefficients)
+{
+  numeratorCoefficient = numCoefficients;
+  denominatorCoefficient = denomCoefficients;
+  numeratorOrder = numCoefficients.size();
+  denominatorOrder = denomCoefficients.size();
 }
 
 void Polynomial::correctSize()
@@ -151,9 +151,8 @@ vector<float> sumVectorLargerSmaller(const vector<float>& larger, const vector<f
 }
 
 /*
-Difference operation: sums the first polinomial and second which
-sign has been inverted; size correction is not needed since it's
-already provided by the sum operatorn
+Difference operation: sum the first polinomial and second which
+sign has been inverted;
 */
 
 Polynomial operator-(const Polynomial& a, const Polynomial& b)
